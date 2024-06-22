@@ -1,0 +1,22 @@
+body {
+    background-color: #f0f0f0;
+}
+.navbar {
+    background-color: #556B2F; /* Dark olive green */
+}
+.navbar-brand {
+    color: #fff; /* White */
+}
+.nav-link {
+    color: #fff; /* White */
+}
+.nav-link:hover {
+    color: #f0f0f0; /* Light grey */
+}
+.list-unstyled {
+    list-style-type: none;
+    padding-left: 0;
+}
+.welcome-section {
+    padding: 100px 15px; /* Adjust as needed */
+}
