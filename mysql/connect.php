@@ -1,10 +1,6 @@
 <?php
 // Database connection parameters
-$host = 'localhost';
-$database = 'test';
-$username = 'zane';
-$password = '5245';
-
+require_once("./database_vars.php");
 // Create a PDO instance
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);

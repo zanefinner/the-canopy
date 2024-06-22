@@ -1,8 +1,5 @@
 <?php
-$host = 'localhost';
-$dbname = 'test';
-$username = 'zane';
-$password = '5245';
+require_once("./database_vars.php");
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);

@@ -1,10 +1,12 @@
 <?php
 session_start();
-$host = 'localhost';
-$dbname = 'test';
-$username = 'zane';
-$password = '5245';
 
+if (!isset($_SESSION['loggedin'])) {
+    header("Location: login.php");
+    exit;
+}
+require_once("mysql/database_vars.php");
+$dbname = $database;
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -41,9 +43,9 @@ try {
         <div class="row">
             <div class="col-md-4">
                 <h2>Feed</h2>
-                <div class="list-group">
+                <div class="list-group"style="background-color: transparent;">
                     <?php foreach ($posts as $post): ?>
-                    <div class="list-group-item">
+                    <div class="list-group-item"style="color: white; background-color: rgba(148, 0, 211, 0.3);"  >
                         <h5 class="mb-1"><?php echo htmlspecialchars($post['title']); ?></h5>
                         <p class="mb-1"><?php echo htmlspecialchars($post['content']); ?></p>
                         <small><?php echo htmlspecialchars($post['created_at']); ?></small>

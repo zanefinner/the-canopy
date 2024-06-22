@@ -1,11 +1,7 @@
-<?php
-session_start();
+<?php session_start();
 
 // Database connection parameters
-$host = 'localhost';
-$database = 'test';
-$username = 'zane';
-$password = '5245';
+require_once("./mysql/database_vars.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if username and password are set
@@ -40,26 +36,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login to The Canopy</title>
+    <?php require_once("frontend/html/head.php")?>
 </head>
 <body>
-    <h1>Login</h1>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required><br>
-        <input type="submit" value="Login">
-    </form>
-    <?php if (isset($login_err)) { ?>
-        <p><?php echo $login_err; ?></p>
-    <?php } ?>
+    <?php require_once("frontend/html/nav.php");?>
+    <div class="container">
+        <h1 class="mt-5">Login</h1>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="mt-3">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <?php if (isset($login_err)) { ?>
+            <div class="alert alert-danger mt-3" role="alert">
+                <?php echo $login_err; ?>
+            </div>
+        <?php } ?>
+    </div>
+    <!-- Bootstrap JS (Optional) -->
 </body>
 </html>
