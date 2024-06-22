@@ -12,7 +12,7 @@ try {
 
     // Create users table
     $pdo->exec("
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
@@ -21,16 +21,8 @@ try {
         )
     ");
 
-    // Seed users table with initial data
-    $stmt = $pdo->prepare("
-        INSERT INTO users (username, email, password_hash) VALUES
-        ('john_doe', 'john.doe@example.com', '" . password_hash('password123', PASSWORD_DEFAULT) . "'),
-        ('jane_smith', 'jane.smith@example.com', '" . password_hash('password456', PASSWORD_DEFAULT) . "')
-    ");
-    $stmt->execute();
-
-    echo "Users table seeded successfully\n";
+    echo "Users table created successfully\n";
 } catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
+    die("Error creating users table: " . $e->getMessage());
 }
 ?>

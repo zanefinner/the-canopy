@@ -10,7 +10,7 @@
     <?PHP require_once "frontend/html/nav.php" ?>
 
     <div class="container welcome-section">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <h1>Welcome to The Canopy <span class="emoji">🌿</span></h1>
             <p class="lead">Connect with like-minded cannabis growers, share your experiences, and explore the world of
                 cannabis strains and genetics.</p>

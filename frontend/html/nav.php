@@ -1,3 +1,4 @@
+<?php session_start()?>
 <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">The Canopy <span class="emoji">🌿</span></a>
@@ -30,8 +31,19 @@
                             Account
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                            <li><a class="dropdown-item" href="#">Login</a></li>
+                            <?php
+                            if ($_SESSION['loggedin'] > 0) {
+                                echo '
+                                    <li><a class="dropdown-item" href="/logout.php">Logout</a></li>
+                                ';
+                            } else {
+                                echo '
+                                <li><a class="dropdown-item" href="/login.php">Login</a></li>
                             <li><a class="dropdown-item" href="#">Create Account</a></li>
+                                ';
+                            }
+                            ?>
+                            
                         </ul>
                     </li>
                     <li class="nav-item">
