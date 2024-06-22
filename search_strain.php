@@ -45,11 +45,15 @@ try {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<?php require_once "frontend/html/head.php"?>
+
     <meta charset="UTF-8">
     <title>Search Strains</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<?PHP require_once "frontend/html/nav.php" ?>
+
 <div class="container">
     <h1 class="mt-5 mb-4">Search Cannabis Strains</h1>
     <form method="GET" action="search_strain.php" class="mb-4">
@@ -105,6 +109,8 @@ try {
         <p>No results found.</p>
     <?php endif; ?>
 </div>
+<?php require_once "frontend/html/footer.php"?>
+
 </body>
 </html>
 
