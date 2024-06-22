@@ -47,7 +47,7 @@ try {
         CREATE TABLE IF NOT EXISTS strain_characteristics (
             strain_id INT,
             characteristic_id INT,
-            value VARCHAR(255),
+            values_list VARCHAR(255),
             PRIMARY KEY (strain_id, characteristic_id),
             FOREIGN KEY (strain_id) REFERENCES strains(strain_id),
             FOREIGN KEY (characteristic_id) REFERENCES characteristics(characteristic_id)

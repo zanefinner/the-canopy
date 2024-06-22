@@ -36,28 +36,28 @@ try {
 
     // Seed the 'strain_characteristics' table
     $strain_characteristics = [
-        ['strain_id' => 1, 'characteristic_id' => 1, 'value' => 'High'],
-        ['strain_id' => 1, 'characteristic_id' => 2, 'value' => 'Earthy, Pine'],
-        ['strain_id' => 1, 'characteristic_id' => 3, 'value' => '8-9 weeks'],
+        ['strain_id' => 1, 'characteristic_id' => 1, 'values_list' => 'High'],
+        ['strain_id' => 1, 'characteristic_id' => 2, 'values_list' => 'Earthy, Pine'],
+        ['strain_id' => 1, 'characteristic_id' => 3, 'values_list' => '8-9 weeks'],
         
-        ['strain_id' => 2, 'characteristic_id' => 1, 'value' => 'High'],
-        ['strain_id' => 2, 'characteristic_id' => 2, 'value' => 'Diesel, Pungent'],
-        ['strain_id' => 2, 'characteristic_id' => 3, 'value' => '10-11 weeks'],
+        ['strain_id' => 2, 'characteristic_id' => 1, 'values_list' => 'High'],
+        ['strain_id' => 2, 'characteristic_id' => 2, 'values_list' => 'Diesel, Pungent'],
+        ['strain_id' => 2, 'characteristic_id' => 3, 'values_list' => '10-11 weeks'],
         
-        ['strain_id' => 3, 'characteristic_id' => 1, 'value' => 'Medium'],
-        ['strain_id' => 3, 'characteristic_id' => 2, 'value' => 'Blueberry, Sweet'],
-        ['strain_id' => 3, 'characteristic_id' => 3, 'value' => '9-10 weeks'],
+        ['strain_id' => 3, 'characteristic_id' => 1, 'values_list' => 'Medium'],
+        ['strain_id' => 3, 'characteristic_id' => 2, 'values_list' => 'Blueberry, Sweet'],
+        ['strain_id' => 3, 'characteristic_id' => 3, 'values_list' => '9-10 weeks'],
         
-        ['strain_id' => 4, 'characteristic_id' => 1, 'value' => 'High'],
-        ['strain_id' => 4, 'characteristic_id' => 2, 'value' => 'Sweet, Earthy'],
-        ['strain_id' => 4, 'characteristic_id' => 3, 'value' => '9-10 weeks'],
+        ['strain_id' => 4, 'characteristic_id' => 1, 'values_list' => 'High'],
+        ['strain_id' => 4, 'characteristic_id' => 2, 'values_list' => 'Sweet, Earthy'],
+        ['strain_id' => 4, 'characteristic_id' => 3, 'values_list' => '9-10 weeks'],
         
-        ['strain_id' => 5, 'characteristic_id' => 1, 'value' => 'High'],
-        ['strain_id' => 5, 'characteristic_id' => 2, 'value' => 'Earthy, Woody'],
-        ['strain_id' => 5, 'characteristic_id' => 3, 'value' => '8-9 weeks'],
+        ['strain_id' => 5, 'characteristic_id' => 1, 'values_list' => 'High'],
+        ['strain_id' => 5, 'characteristic_id' => 2, 'values_list' => 'Earthy, Woody'],
+        ['strain_id' => 5, 'characteristic_id' => 3, 'values_list' => '8-9 weeks'],
     ];
 
-    $stmt = $pdo->prepare("INSERT INTO strain_characteristics (strain_id, characteristic_id, value) VALUES (:strain_id, :characteristic_id, :value)");
+    $stmt = $pdo->prepare("INSERT INTO strain_characteristics (strain_id, characteristic_id, values_list) VALUES (:strain_id, :characteristic_id, :values_list)");
     foreach ($strain_characteristics as $strain_characteristic) {
         $stmt->execute($strain_characteristic);
     }
