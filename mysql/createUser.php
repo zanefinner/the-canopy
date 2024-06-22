@@ -1,6 +1,6 @@
 <?php
 // Database connection parameters
-require_once("./database_vars.php");
+require_once("database_vars.php");
 
 try {
     // Create a PDO instance

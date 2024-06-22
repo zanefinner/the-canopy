@@ -1,5 +1,6 @@
 <?php
-require_once("./database_vars.php");
+require_once("database_vars.php");
+$dbname = $database;
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
