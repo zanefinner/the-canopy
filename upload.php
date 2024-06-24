@@ -1,5 +1,3 @@
-
-
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -11,7 +9,7 @@ if (!isset($_SESSION['loggedin'])) {
 }
 
 require_once("mysql/database_vars.php");
-
+$dbname = $database;
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
     $targetDir = "uploads/";
     $targetFile = $targetDir . basename($_FILES["file"]["name"]);
@@ -43,8 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
     }
 
     // Allow certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif") {
+    if (
+        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif"
+    ) {
         echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
         $uploadOk = 0;
     }
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
         echo "Sorry, your file was not uploaded.";
-    // if everything is ok, try to upload file
+        // if everything is ok, try to upload file
     } else {
         if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFile)) {
             echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
@@ -61,10 +61,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
                 // Connect to the database
                 $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+                $filename = basename($_FILES["file"]["name"]);
+                
                 // Insert the uploaded image into the database
                 $stmt = $pdo->prepare("INSERT INTO images (filename, user_id) VALUES (:filename, :user_id)");
-                $stmt->bindParam(':filename', basename($_FILES["file"]["name"]));
+                $stmt->bindParam(':filename', $filename);
                 $stmt->bindParam(':user_id', $_SESSION['id']);
                 $stmt->execute();
 
