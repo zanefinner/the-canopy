@@ -70,6 +70,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
                 $stmt->execute();
 
                 echo " Image record inserted into database.";
+
+
+        // Redirect to the dashboard
+        header("Location: dashboard.php");
             } catch (PDOException $e) {
                 echo "Error inserting image record into database: " . $e->getMessage();
             }
