@@ -5,7 +5,8 @@ $init = array(
     "createRudimentaryStrainTable",
     "seedStrains",
     "createPosts",
-    "seedPosts"
+    "seedPosts",
+    "createImages"
 );
 foreach ($init as $fileName) {
     include 'mysql/'.$fileName.'.php'; // or require $fileName;
