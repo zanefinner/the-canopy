@@ -70,12 +70,15 @@ try {
     $stmt->execute();
     $other_posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->query("SELECT images.*, users.username FROM images
-                         JOIN users ON images.user_id = users.id
-                         ORDER BY images.created_at DESC");
+    // Fetch only photos uploaded by the current user
+    $stmt = $pdo->prepare("SELECT * FROM images WHERE user_id = :user_id ORDER BY created_at DESC");
+    $stmt->bindParam(':user_id', $_SESSION['id']);
+    $stmt->execute();
     $photos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->query("SELECT username FROM users WHERE id != {$_SESSION['id']}");
+    $stmt = $pdo->prepare("SELECT username FROM users WHERE id != :user_id");
+    $stmt->bindParam(':user_id', $_SESSION['id']);
+    $stmt->execute();
     $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
@@ -89,63 +92,47 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Canopy - Dashboard</title>
-    <?php require_once "frontend/html/head.php" ?>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <?php require_once "frontend/html/head.php" ?>
+    
     <style>
-        body {
-            background-color: #f0f2f5;
-        }
+ 
 
-        .card {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            margin-bottom: 1rem;
-        }
+ body {
+      background-color: #343a40;
+      color: white;
+    }
 
-        .post-card {
-            background-color: rgba(148, 0, 211, 0.3);
-        }
+    .card {
+      background-color: #424242;
+      border-color: #757575;
+    }
 
-        .card-header {
-            background-color: transparent;
-            border-bottom: none;
-        }
+    .card-header {
 
-        .card-body {
-            padding: 1rem;
-        }
+      border-bottom: 1px solid #757575;
+      color: white;
+    }
+    .card-body{
+        color: white;
+    }
 
-        .post-content {
-            color: white;
-        }
+    .btn-primary {
+      background-color: #2196f3;
+      border-color: #2196f3;
+    }
 
-        .crud-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            margin-right: 0.5rem;
-            cursor: pointer;
-        }
+    .btn-primary:hover {
+      background-color: #0d47a1;
+      border-color: #0d47a1;
+    }
 
-        .crud-btn:hover {
-            background-color: #0056b3;
+    @media (min-width: 992px) {
+        .feed-column {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
         }
-
-        .delete-btn {
-            background-color: #dc3545;
-        }
-
-        .delete-btn:hover {
-            background-color: #bd2130;
-        }
-
-        @media (min-width: 992px) {
-            .feed-column {
-                flex: 0 0 66.666667%;
-                max-width: 66.666667%;
-            }
-        }
+    }
     </style>
 </head>
 
@@ -168,7 +155,8 @@ try {
                                 <input type="text" class="form-control" name="title" placeholder="Title" required>
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control" name="content" rows="3" placeholder="What's on your mind?" required></textarea>
+                                <textarea class="form-control" name="content" rows="3"
+                                    placeholder="What's on your mind?" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Post</button>
                         </form>
@@ -184,16 +172,16 @@ try {
                 <h2>Feed</h2>
                 <!-- Posts by other users -->
                 <?php foreach ($other_posts as $post) : ?>
-                    <div class="card post-card">
-                        <div class="card-header">
-                            <h5 class="mb-1"><?php echo htmlspecialchars($post['title']); ?></h5>
-                            <small>Posted by <?php echo htmlspecialchars($post['username']); ?> on
-                                <?php echo htmlspecialchars($post['created_at']); ?></small>
-                        </div>
-                        <div class="card-body post-content">
-                            <p class="mb-1"><?php echo htmlspecialchars($post['content']); ?></p>
-                        </div>
+                <div class="card post-card">
+                    <div class="card-header">
+                        <h5 class="mb-1"><?php echo htmlspecialchars($post['title']); ?></h5>
+                        <small>Posted by <?php echo htmlspecialchars($post['username']); ?> on
+                            <?php echo htmlspecialchars($post['created_at']); ?></small>
                     </div>
+                    <div class="card-body post-content">
+                        <p class="mb-1"><?php echo htmlspecialchars($post['content']); ?></p>
+                    </div>
+                </div>
                 <?php endforeach; ?>
             </div>
             <!-- Right Column -->
@@ -214,61 +202,55 @@ try {
                 <!-- Your Posts -->
                 <h2 class="mt-4">Your Posts</h2>
                 <!-- Display your posts -->
-                <!-- Display your posts -->
                 <?php foreach ($your_posts as $post) : ?>
-                    <div class="card post-card">
-                        <div class="card-header">
-                            <h5 class="mb-1"><?php echo htmlspecialchars($post['title']); ?></h5>
-                            <small>Posted on <?php echo htmlspecialchars($post['created_at']); ?></small>
-                        </div>
-                        <div class="card-body post-content">
-                            <p class="mb-1"><?php echo htmlspecialchars($post['content']); ?></p>
-                            <!-- Edit and Delete buttons -->
-                            <div class="d-flex justify-content-end mt-3">
-                                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                                    <input type="hidden" name="edit_post_id" value="<?php echo $post['id']; ?>">
-                                    <button type="submit" class="btn btn-primary mr-2">Edit</button>
-                                </form>
-                                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                                    <input type="hidden" name="delete_post_id" value="<?php echo $post['id']; ?>">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </div>
+                <div class="card post-card">
+                    <div class="card-header">
+                        <h5 class="mb-1"><?php echo htmlspecialchars($post['title']); ?></h5>
+                        <small>Posted on <?php echo htmlspecialchars($post['created_at']); ?></small>
+                    </div>
+                    <div class="card-body post-content">
+                        <p class="mb-1"><?php echo htmlspecialchars($post['content']); ?></p>
+                        <!-- Edit and Delete buttons -->
+                        <div class="d-flex justify-content-end mt-3">
+                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                                <input type="hidden" name="edit_post_id" value="<?php echo $post['id']; ?>">
+                                <button type="submit" class="btn btn-primary mr-2">Edit</button>
+                            </form>
+                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                                <input type="hidden" name="delete_post_id" value="<?php echo $post['id']; ?>">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         </div>
                     </div>
+                </div>
                 <?php endforeach; ?>
 
 
-                <h2 class="mt-4">Uploaded Photos</h2>
-                <div class="row">
-                <form action="upload.php" method="post" enctype="multipart/form-data">
+            </div>
+        </div>
+        <div class="row">
+            <!-- Your Photos -->
+            <h2 class="mt-4">Your Photos</h2>
+            <form action="upload.php" method="post" enctype="multipart/form-data">
                     <input type="file" name="file" id="file">
                     <input type="submit" value="Upload File" name="submit">
                 </form>
-                    <?php foreach ($photos as $photo) : ?>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <img src="/uploads/<?php echo htmlspecialchars($photo['filename']); ?>" class="card-img-top" alt="Uploaded Photo">
-                                <div class="card-body">
-                                    <p class="card-text">Uploaded by <?php echo htmlspecialchars($photo['username']); ?></p>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+            <!-- Display user's photos -->
+            <?php foreach ($photos as $photo) : ?>
+            <div class="card col-lg-2 post-card">
+                <div class="card-header">
+                    <small>Uploaded on <?php echo htmlspecialchars($photo['created_at']); ?></small>
                 </div>
-                <!-- Friends -->
-                <h2 class="mt-4">Friends</h2>
-                <?php foreach ($friends as $friend) : ?>
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-1"><?php echo htmlspecialchars($friend['username']); ?></h5>
-                        </div>
+                <a target="_blank" href="/uploads/<?php echo htmlspecialchars($photo['filename'])?>">
+                    <div class="card-body post-content">
+                        <img src="/uploads/<?php echo htmlspecialchars($photo['filename']); ?>" alt="Photo"
+                            class="img-fluid">
                     </div>
-                <?php endforeach; ?>
+                </a>
             </div>
+            <?php endforeach; ?>
         </div>
     </div>
-    <?php require_once "frontend/html/footer.php" ?>
 </body>
 
 </html>
