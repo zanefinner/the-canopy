@@ -103,4 +103,33 @@ class Users {
             echo 'User is already being followed';
         }
     }
+    public function unfollow($id) {
+      // Start the session (if not already started)
+      if (session_status() == PHP_SESSION_NONE) {
+          session_start();
+      }
+
+      // Get the current session ID
+      $currentSessionId = $_SESSION['id'];
+
+      // Retrieve the following data
+      $dataJSON = $this->model->getFollowing($currentSessionId);
+      $dataArr = json_decode($dataJSON, true); // Decode JSON as an associative array
+
+      // Ensure $dataArr is an array
+      if (!is_array($dataArr)) {
+          $dataArr = [];
+      }
+
+      // Check if the ID exists in the array and remove it if found
+      $key = array_search($id, $dataArr);
+      if ($key !== false) {
+          unset($dataArr[$key]);
+          $dataJSON = json_encode(array_values($dataArr)); // Re-encode array to JSON
+          $this->model->setFollowing($currentSessionId, $dataJSON); // Update following data in the database
+          echo 'User unfollowed successfully';
+      } else {
+          echo 'User is not currently followed';
+      }
+  }
 }
