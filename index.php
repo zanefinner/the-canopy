@@ -50,6 +50,7 @@ switch ($uri[0]){
   break;
   case 'follow':
     $Controllers['user']->follow($uri[1]);
+    ECHO $uri[1];
   break;
   default:
     $Controllers['home']->error("Location no longer exists");

@@ -20,7 +20,7 @@
           echo<<<ND
           <div class="post">
             <div class="origin">
-              <a href="/">{$key['author']}</a> at {$key['posted_at']}
+              <a href="/">{$key['author']}</a> at {$key['created_at']}
             </div>
             <p>{$key['content']}</p>
           </div>
