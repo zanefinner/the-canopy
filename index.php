@@ -38,7 +38,7 @@ switch ($uri[0]) {
         break;
     case 'feed':
         $title = "Feed";
-        $Controllers['home']->index();
+        $Controllers['posts']->getPostsForUserFeed($_SESSION['id']);
         break;
     case 'search':
         $Controllers['user']->search($_GET);

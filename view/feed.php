@@ -8,29 +8,21 @@
       <form class="new-post" method="post" action='/post-something'>
         Post Something<input type="text" name="content">
       </form>
+
+    <div class="posts-col col-12 col-sm-12 col-md-12 col-lg-6">
+
+      <h1>For You</h1>
       <?php
-        $data=[
-          [
-            'author'=>'Zane',
-            'content'=>'Welcome to my dummy text',
-            'posted_at'=>'24:01 Pacific Time',
-            'comments'=>[
-              'author'=>'John',
-              'content'=>'lol so dummb'
-            ]
-          ],
-        ];
-        foreach($data as $key){
-          echo<<<ND
-          <div class="post">
-            <div class="origin">
-              <a href="/">{$key['author']}</a> at {$key['posted_at']}
-            </div>
-            <p>{$key['content']}</p>
-          </div>
-ND;
-        }
-      ?>
+// Assuming $data holds your array of posts
+
+foreach ($data as $post) {
+    echo '<div class="post">';
+    echo '<p><strong>' . htmlspecialchars($post['author_alias']) . '</strong></p>';
+    echo '<p>' . htmlspecialchars($post['content']) . '</p>';
+    echo '<p><small>Posted on ' . htmlspecialchars($post['created_at']) . '</small></p>';
+    echo '</div>';
+}
+?>
 
 
     </div>
@@ -38,3 +30,4 @@ ND;
   </div>
 </div>
 <?php require 'partials/footer.php';?>
+
