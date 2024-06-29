@@ -2,28 +2,28 @@
 
 @section('content')
     <div class="container">
-        <h1>Edit Post</h1>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        <form action="{{ route('posts.update', $post) }}" method="POST">
+        <h1>{{ $post->title }}</h1>
+        <p>{{ $post->body }}</p>
+        <p>By: {{ $post->user->name }}</p>
+        <p>Likes: {{ $post->likes->count() }}</p>
+        
+        <form action="{{ route('posts.like', $post) }}" method="POST">
             @csrf
-            @method('PUT')
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $post->title) }}">
+            <button type="submit" class="btn btn-primary">Like</button>
+        </form>
+
+        <h3>Comments</h3>
+        @foreach ($post->comments as $comment)
+            <div>
+                <p>{{ $comment->body }}</p>
+                <p>By: {{ $comment->user->name }}</p>
             </div>
-            <div class="form-group">
-                <label for="body">Body</label>
-                <textarea name="body" id="body" class="form-control">{{ old('body', $post->body) }}</textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Update</button>
+        @endforeach
+
+        <form action="{{ route('posts.comment', $post) }}" method="POST">
+            @csrf
+            <textarea name="body" rows="3" required></textarea>
+            <button type="submit" class="btn btn-primary">Comment</button>
         </form>
     </div>
 @endsection

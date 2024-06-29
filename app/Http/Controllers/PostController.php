@@ -1,11 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PostController extends Controller
-{
+class PostController extends Controller {
     public function index()
     {
         $posts = Post::with('user')->get();
@@ -60,5 +61,27 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
+    }
+
+
+    public function like(Post $post) {
+        $like = new Like();
+        $like->user_id = auth()->user()->id;
+        $post->likes()->save($like);
+
+        return redirect()->route('posts.show', $post)->with('success', 'Post liked successfully.');
+    }
+
+    public function comment(Request $request, Post $post) {
+        $request->validate([
+            'body' => 'required|max:255',
+        ]);
+
+        $comment = new Comment();
+        $comment->body = $request->body;
+        $comment->user_id = auth()->user()->id;
+        $post->comments()->save($comment);
+
+        return redirect()->route('posts.show', $post)->with('success', 'Comment added successfully.');
     }
 }

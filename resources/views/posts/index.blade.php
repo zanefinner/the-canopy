@@ -16,6 +16,11 @@
                     </h2>
                     <p class="card-text">{{ $post->body }}</p>
                     <p class="text-muted">By: {{ $post->user->name }}</p>
+                    <p class="text-muted">Likes: {{ $post->likes->count() }}</p>
+                    <form action="{{ route('posts.like', $post) }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Like</button>
+                    </form>
                     <a href="{{ route('posts.edit', $post) }}" class="btn btn-primary">Edit</a>
                     <form action="{{ route('posts.destroy', $post) }}" method="POST" style="display:inline;">
                         @csrf
